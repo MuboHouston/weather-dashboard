@@ -9,3 +9,17 @@ header {
 #search-form {
     border-bottom: 3px solid grey;
 }
+
+.current-header {
+    display: flex;
+}
+
+.current-weather {
+    border: 1px solid black;
+    padding-left: 5px;
+    padding-bottom: 20px;
+}
+
+.list-group {
+    list-style-type: none;
+}

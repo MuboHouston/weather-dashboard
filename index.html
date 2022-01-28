@@ -24,11 +24,19 @@
 
         <div id="weather-container" class="col-12 col-md-7">
             <div class="current-weather">
-                <div>
+                <div class="current-header">
                     <h3 id="city-search-term"></h3>
                     <h3 id="date"></h3>
+                    <div id="icon"><img id="wicon" src="" alt=""></div>
                 </div>
-                <div id="current-container" class="list-group"></div>
+                <div id="current-container">
+                    <ul class="list-group">
+                        <li>Temp: <span class="temp"></span></li>
+                        <li>Wind: <span class="wind"></span></li>
+                        <li>Humidity: <span class="humidity"></span></li>
+                        <li id="color">UV Index: <span class="uvi"></span></li>
+                    </ul>
+                </div>
             </div>
 
             <div class="future-weather">

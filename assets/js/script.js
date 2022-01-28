@@ -10,18 +10,16 @@ var formSubmitHandler = function(event) {
 
     //get value from input element
     var cityName = cityInputEl.value.trim();
-
+    
     if(cityName) {
-        getCurrentWeather(cityName);
-        getFutureWeather(cityName);
-        getCurrentDate();
+        getLatLon(cityName);
         cityInputEl.value = "";
     } else {
         alert("Please enter city name")
     }
 }
 
-var getCurrentWeather = function(cityName) {
+var getLatLon = function(cityName) {
     //format the weather api url
     var apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&units=imperial&appid=9e1b9c65c5a45c7606cbddd777f0e91b";
     
@@ -30,8 +28,8 @@ var getCurrentWeather = function(cityName) {
     .then(function(response) {
         if (response.ok) {
             response.json().then(function(data) {
-            // displayWeather(data, cityName);
-            console.log(data);
+            getWeather(data.coord.lat, data.coord.lon, cityName)
+            // getCurrentDate(data.dt)
         });
     }else{
         alert("Please enter valid city name");
@@ -39,35 +37,70 @@ var getCurrentWeather = function(cityName) {
 })
 }
 
-var getFutureWeather = function(cityName) {
-    var apiUrl = "https://api.openweathermap.org/data/2.5/forecast?q=" + cityName + "&cnt=5&units=imperial&&appid=37b206da464f2ac783efca5a706e09d3";
-
+var getWeather = function(lat, lon, cityName) {
+    var apiUrl = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&units=imperial&appid=37b206da464f2ac783efca5a706e09d3";
+    
     fetch(apiUrl)
     .then(function(response) {
         if(response.ok) {
             response.json().then(function(data) {
+                structureHTML(data, cityName);
                 console.log(data);
             });
         }
     })
 }
 
-var getCurrentDate = function(cityName) {
-    var options = {month: "long", day: "numeric"};
-    var today = new Date();
-    var currentDay= today.toLocaleDateString("en-US", options);
-    dateEl.textContent = currentDay;
-}
+var structureHTML = function (data, cityName) {
+    console.log(data)
 
-var displayWeather = function(current, searchTerm){
-    currentWeatherContainerEl.textContent = "";
-    citySearchTerm.textContent = searchTerm;
-    //display the current time
+    citySearchTerm.textContent = cityName;
 
-    var temp = main.temp;
-    console.log(temp);
-    // var wind =;
-    // var humidity =;
+    var unixTimestamp = data.current.dt;
+    var milliseconds = unixTimestamp * 1000;
+    var options = {year: "numeric", month: "numeric", day: "numeric"};
+    var date = new Date(milliseconds);
+    var currentDate = date.toLocaleDateString("en-US", options)
+    dateEl.textContent = "(" + currentDate + ")";
+    
+    var iconCode = data.current.weather[0].icon;
+    var iconUrl = "http://openweathermap.org/img/w/" + iconCode + ".png";
+    document.querySelector("#wicon").setAttribute("src", iconUrl);
+    document.querySelector("#wicon").style.textAlign = "center";
+
+    getTemp = data.current.temp;
+    TempEl = document.querySelector(".temp");
+    TempEl.textContent = getTemp;
+
+    getWind = data.current.wind_speed;
+    windEl = document.querySelector(".wind");
+    windEl.textContent = getWind;
+
+    getHumidity = data.current.humidity;
+    humidityEl = document.querySelector(".humidity");
+    humidityEl.textContent = getHumidity;
+
+    getUVIndex = data.current.uvi;
+    uviEl = document.querySelector(".uvi");
+    uviEl.textContent = getUVIndex;
+
+    if(getUVIndex<2){
+        document.querySelector("#color .uvi").style.backgroundColor = "green";
+        document.querySelector("#color .uvi").style.display = "inline";
+        document.querySelector("#color .uvi").style.padding = "5px";
+        document.querySelector("#color .uvi").style.borderRadius = "10px";
+    }else if (getUVIndex<5){
+        document.querySelector("#color .uvi").style.backgroundColor = "yellow";
+        document.querySelector("#color .uvi").style.display = "inline";
+        document.querySelector("#color .uvi").style.padding = "5px";
+        document.querySelector("#color .uvi").style.borderRadius = "10px";
+    } else {
+        document.querySelector("#color .uvi").style.backgroundColor = "red";
+        document.querySelector("#color .uvi").style.display = "inline";
+        document.querySelector("#color .uvi").style.padding = "5px";
+        document.querySelector("#color .uvi").style.borderRadius = "10px";
+    }
+    
 }
 
 searchFormEl.addEventListener("submit", formSubmitHandler);
