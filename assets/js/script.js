@@ -68,39 +68,74 @@ var structureHTML = function (data, cityName) {
     document.querySelector("#wicon").setAttribute("src", iconUrl);
     document.querySelector("#wicon").style.textAlign = "center";
 
-    getTemp = data.current.temp;
-    TempEl = document.querySelector(".temp");
-    TempEl.textContent = getTemp;
+    var getTemp = data.current.temp;
+    var TempEl = document.querySelector(".temp");
+    TempEl.textContent = "Temp: " + getTemp;
 
-    getWind = data.current.wind_speed;
-    windEl = document.querySelector(".wind");
-    windEl.textContent = getWind;
+    var getWind = data.current.wind_speed;
+    var windEl = document.querySelector(".wind");
+    windEl.textContent = "Wind: " + getWind;
 
-    getHumidity = data.current.humidity;
-    humidityEl = document.querySelector(".humidity");
-    humidityEl.textContent = getHumidity;
+    var getHumidity = data.current.humidity;
+    var humidityEl = document.querySelector(".humidity");
+    humidityEl.textContent = "Humidity: " + getHumidity;
 
-    getUVIndex = data.current.uvi;
-    uviEl = document.querySelector(".uvi");
-    uviEl.textContent = getUVIndex;
-
-    if(getUVIndex<2){
-        document.querySelector("#color .uvi").style.backgroundColor = "green";
-        document.querySelector("#color .uvi").style.display = "inline";
-        document.querySelector("#color .uvi").style.padding = "5px";
-        document.querySelector("#color .uvi").style.borderRadius = "10px";
+    var getUVIndex = data.current.uvi;
+    var uviNumEl = document.querySelector(".background");
+    uviNumEl.textContent = getUVIndex;
+    var uviEl = document.querySelector(".uvi")
+    uviEl.style.display = "block"
+    
+    if(getUVIndex < 2){
+        uviNumEl.style.backgroundColor = "green";
+        uviNumEl.style.display = "inline";
+        uviNumEl.style.padding = "5px";
+        uviNumEl.style.borderRadius = "10px";
     }else if (getUVIndex<5){
-        document.querySelector("#color .uvi").style.backgroundColor = "yellow";
-        document.querySelector("#color .uvi").style.display = "inline";
-        document.querySelector("#color .uvi").style.padding = "5px";
-        document.querySelector("#color .uvi").style.borderRadius = "10px";
+        uviNumEl.style.backgroundColor = "yellow";
+        uviNumEl.style.display = "inline";
+        uviNumEl.style.padding = "5px";
+        uviNumEl.style.borderRadius = "10px";
     } else {
-        document.querySelector("#color .uvi").style.backgroundColor = "red";
-        document.querySelector("#color .uvi").style.display = "inline";
-        document.querySelector("#color .uvi").style.padding = "5px";
-        document.querySelector("#color .uvi").style.borderRadius = "10px";
+        uviNumEl.style.backgroundColor = "red";
+        uviNumEl.style.display = "inline";
+        uviNumEl.style.padding = "5px";
+        uviNumEl.style.borderRadius = "10px";
     }
     
+    var forecastEls = document.querySelectorAll(".forecast");
+    for (i=0; i<forecastEls.length; i++) {
+        forecastEls[i].innerHTML = "";
+        var forecastUnixTimestamp = data.daily[i].dt;
+        var forecastMilliseconds = forecastUnixTimestamp * 1000;
+        // options = {year: "numeric", month: "numeric", day: "numeric"};
+        var futureDate = new Date(forecastMilliseconds)
+        var forecastDate = futureDate.toLocaleDateString("en-US", options)
+        var forecastDateEl = document.createElement("p");
+        forecastDateEl.setAttribute("Class", "forecast-date")
+        forecastDateEl.innerHTML = forecastDate;
+        forecastEls[i].append(forecastDateEl)
+
+        var forecastWeatherEl = document.createElement("img")
+        forecastIconCode = data.daily[i].weather[0].icon;
+        forecastWeatherEl.setAttribute("src", "http://openweathermap.org/img/w/" + forecastIconCode + ".png")
+        forecastEls[i].append(forecastWeatherEl)
+
+        var forecastTempEl = document.createElement("p")
+        forecastTempEl.innerHTML = "Temp: " + data.daily[i].temp;
+        forecastEls[i].append(forecastTempEl);
+
+        var forecastWindEl = document.createElement("p")
+        forecastWindEl.innerHTML = "Wind: " + data.daily[i].wind_speed;
+        forecastEls[i].append(forecastWindEl);
+
+
+        var forecastHumidityEl = document.createElement("p")
+        forecastHumidityEl.innerHTML = "Humidity: " + data.daily[i].humidity;
+        forecastEls[i].append(forecastHumidityEl);
+
+    }
+
 }
 
 searchFormEl.addEventListener("submit", formSubmitHandler);
