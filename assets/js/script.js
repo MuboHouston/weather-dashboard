@@ -152,18 +152,15 @@ var structureHTML = function (data, cityName) {
 
         var forecastTempEl = document.createElement("p")
         forecastTempEl.innerHTML = "Temp: " + data.daily[forecastIndex].temp.max + " &#176F";
-        forecastTempEl.style.fontSize = "25px"
         forecastEls[i].append(forecastTempEl);
 
         var forecastWindEl = document.createElement("p")
         forecastWindEl.innerHTML = "Wind: " + data.daily[forecastIndex].wind_speed + " MPH";
-        forecastWindEl.style.fontSize = "25px"
         forecastEls[i].append(forecastWindEl);
 
 
         var forecastHumidityEl = document.createElement("p")
         forecastHumidityEl.innerHTML = "Humidity: " + data.daily[forecastIndex].humidity + " %";
-        forecastHumidityEl.style.fontSize = "25px"
         forecastEls[i].append(forecastHumidityEl);
     }
 }

@@ -1,5 +1,6 @@
 * {
-    font-size: 30px;
+    margin: 0;
+    padding: 0;
 }
 
 header {
@@ -19,6 +20,10 @@ header {
 
 #city-search {
     font-size: 20px;
+}
+
+#city-search-term, #date {
+    font-weight: bold;
 }
 
 #search-form button {
@@ -42,9 +47,16 @@ header {
 
 .list-group {
     list-style-type: none;
+    line-height: 2.4;
 }
 
 .forecast-header h4 {
     font-weight: bold;
     padding-top: 25px;
+}
+
+.forecast-date {
+    font-size: 22px;
+    font-weight: bold;
+    padding-top: 5px;
 }
