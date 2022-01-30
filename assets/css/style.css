@@ -8,6 +8,8 @@ header {
 
 #search-form {
     border-bottom: 3px solid grey;
+    width: 100%;
+    padding: 0;
 }
 
 .current-header {
@@ -22,4 +24,9 @@ header {
 
 .list-group {
     list-style-type: none;
+}
+
+.forecast-header h4 {
+    font-weight: bold;
+    padding-top: 25px;
 }

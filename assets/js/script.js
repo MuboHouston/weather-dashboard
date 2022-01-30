@@ -17,6 +17,9 @@ var formSubmitHandler = function(event) {
     } else {
         alert("Please enter city name")
     }
+    
+    localStorage.setItem("city", cityName);
+    localStorage.getItem("city")
 }
 
 var getLatLon = function(cityName) {
@@ -28,8 +31,7 @@ var getLatLon = function(cityName) {
     .then(function(response) {
         if (response.ok) {
             response.json().then(function(data) {
-            getWeather(data.coord.lat, data.coord.lon, cityName)
-            // getCurrentDate(data.dt)
+            getWeather(data.coord.lat, data.coord.lon, cityName);;
         });
     }else{
         alert("Please enter valid city name");
@@ -91,20 +93,23 @@ var structureHTML = function (data, cityName) {
             uviNumEl.style.display = "inline";
             uviNumEl.style.padding = "5px";
             uviNumEl.style.borderRadius = "10px";
+            uviNumEl.style.color = "white"
         }else if (getUVIndex<5){
             uviNumEl.style.backgroundColor = "yellow";
             uviNumEl.style.display = "inline";
             uviNumEl.style.padding = "5px";
             uviNumEl.style.borderRadius = "10px";
+            uviNumEl.style.color = "white"
         } else {
             uviNumEl.style.backgroundColor = "red";
             uviNumEl.style.display = "inline";
             uviNumEl.style.padding = "5px";
             uviNumEl.style.borderRadius = "10px";
+            uviNumEl.style.color = "white"
         }
     
     var forecastEls = document.querySelectorAll(".forecast");
-    for (i=0; i<forecastEls.length; i++) {
+    for (let i=0; i<forecastEls.length; i++) {
         forecastEls[i].innerHTML = "";
         const forecastIndex = i + 1;
         var forecastUnixTimestamp = data.daily[forecastIndex].dt;
@@ -123,19 +128,22 @@ var structureHTML = function (data, cityName) {
 
         var forecastTempEl = document.createElement("p")
         forecastTempEl.innerHTML = "Temp: " + data.daily[forecastIndex].temp.max + " &#176F";
+        forecastTempEl.style.fontSize = "25px"
         forecastEls[i].append(forecastTempEl);
 
         var forecastWindEl = document.createElement("p")
         forecastWindEl.innerHTML = "Wind: " + data.daily[forecastIndex].wind_speed + " MPH";
+        forecastWindEl.style.fontSize = "25px"
         forecastEls[i].append(forecastWindEl);
 
 
         var forecastHumidityEl = document.createElement("p")
         forecastHumidityEl.innerHTML = "Humidity: " + data.daily[forecastIndex].humidity + " %";
+        forecastHumidityEl.style.fontSize = "25px"
         forecastEls[i].append(forecastHumidityEl);
 
     }
-
 }
 
 searchFormEl.addEventListener("submit", formSubmitHandler);
+
