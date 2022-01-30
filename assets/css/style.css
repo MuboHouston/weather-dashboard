@@ -6,10 +6,28 @@ header {
     background-image: linear-gradient(to right, rgba(76, 74, 185, 0.534), rgb(27, 5, 224));
 }
 
+#main-container {
+    margin-top: 30px;
+    margin: 10px;
+}
+
 #search-form {
     border-bottom: 3px solid grey;
     width: 100%;
     padding: 0;
+}
+
+#city-search {
+    font-size: 20px;
+}
+
+#search-form button {
+    color: white;
+}
+
+.form-label {
+    font-weight: bold;
+    font-size: 25px;
 }
 
 .current-header {
@@ -29,10 +47,4 @@ header {
 .forecast-header h4 {
     font-weight: bold;
     padding-top: 25px;
-}
-
-.history-buttons {
-    width: 100%;
-    margin-top: 20px;
-    border-radius: 5px;
 }

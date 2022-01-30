@@ -1,3 +1,5 @@
+var cities = [];
+
 var searchFormEl = document.querySelector("#search-form");
 var cityInputEl = document.querySelector("#city-search");
 var currentWeatherContainerEl = document.querySelector("#current-container")
@@ -5,29 +7,45 @@ var citySearchTerm = document.querySelector("#city-search-term")
 var dateEl = document.querySelector("#date");
 var historySearchEl = document.querySelector(".history-search")
 
-// localStorage.clear();
-
 var formSubmitHandler = function(event) {
     event.preventDefault();
     //console.log(event);
 
     //get value from input element
     var cityName = cityInputEl.value.trim();
-
-    var displayHistory = document.createElement("button");
-    displayHistory.setAttribute("class", "history-buttons")
-    displayHistory.textContent = cityName; 
     
     if(cityName) {
         getLatLon(cityName);
-        localStorage.setItem("citySearchList", cityName);
-        localStorage.getItem("citySearchList");
-        historySearchEl.append(displayHistory);
+        pastSearch(cityName);
+        saveSearch();
+        cities.unshift(cityName)
         cityInputEl.value = "";
     } else {
         alert("Please enter city name")
     }
 }
+
+var pastSearch = function(pastSearch) {
+    // console.log(pastSearch);
+
+    var pastSearchEl = document.createElement("button");
+    pastSearchEl.textContent =pastSearch;
+    pastSearchEl.classList = "d-flex w-100 btn-light border p-2 mt-2";
+    pastSearchEl.setAttribute("data-city", pastSearch);
+    pastSearchEl.setAttribute("type", "submit");
+    historySearchEl.prepend(pastSearchEl);          
+}
+
+var pastSearchHandler = function (event) {
+    var city = event.target.getAttribute("data-city")
+    if (city){
+        getLatLon(city)
+    }
+}
+
+var saveSearch = function() {
+    localStorage.setItem("cities", JSON.stringify(cities))    
+};
 
 var getLatLon = function(cityName) {
     //format the weather api url
@@ -151,20 +169,4 @@ var structureHTML = function (data, cityName) {
 }
 
 searchFormEl.addEventListener("submit", formSubmitHandler);
-
-// historySearchEl.addEventListener("click", function() {
-//     var city = $(this).text();
-//     formSubmitHandler(city)
-// })
-
-
- // localStorage.setItem("city", cityInputEl.value);
-    // localStorage.getItem("city")
-
-    // for (var i = 0; i < localStorage.length; i++) {
-    //     localStorage.getItem("citySearchList");
-    //     var cityName = $(".list-group").addClass("list-group-item");
-    
-    //     cityName.append("<li>" + city + "</li");
-    // }
-
+historySearchEl.addEventListener("click", pastSearchHandler);
