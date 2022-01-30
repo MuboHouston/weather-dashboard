@@ -70,45 +70,45 @@ var structureHTML = function (data, cityName) {
 
     var getTemp = data.current.temp;
     var TempEl = document.querySelector(".temp");
-    TempEl.textContent = "Temp: " + getTemp;
+    TempEl.innerHTML = "Temp: " + getTemp + " &#176F";
 
     var getWind = data.current.wind_speed;
     var windEl = document.querySelector(".wind");
-    windEl.textContent = "Wind: " + getWind;
+    windEl.textContent = "Wind: " + getWind + " MPH";
 
     var getHumidity = data.current.humidity;
     var humidityEl = document.querySelector(".humidity");
-    humidityEl.textContent = "Humidity: " + getHumidity;
+    humidityEl.textContent = "Humidity: " + getHumidity + " %";
 
     var getUVIndex = data.current.uvi;
-    var uviNumEl = document.querySelector(".background");
-    uviNumEl.textContent = getUVIndex;
-    var uviEl = document.querySelector(".uvi")
-    uviEl.style.display = "block"
-    
-    if(getUVIndex < 2){
-        uviNumEl.style.backgroundColor = "green";
-        uviNumEl.style.display = "inline";
-        uviNumEl.style.padding = "5px";
-        uviNumEl.style.borderRadius = "10px";
-    }else if (getUVIndex<5){
-        uviNumEl.style.backgroundColor = "yellow";
-        uviNumEl.style.display = "inline";
-        uviNumEl.style.padding = "5px";
-        uviNumEl.style.borderRadius = "10px";
-    } else {
-        uviNumEl.style.backgroundColor = "red";
-        uviNumEl.style.display = "inline";
-        uviNumEl.style.padding = "5px";
-        uviNumEl.style.borderRadius = "10px";
-    }
+        var uviNumEl = document.querySelector(".background");
+        uviNumEl.textContent = getUVIndex;
+        var uviEl = document.querySelector(".uvi")
+        uviEl.style.display = "block"
+        
+        if(getUVIndex < 2){
+            uviNumEl.style.backgroundColor = "green";
+            uviNumEl.style.display = "inline";
+            uviNumEl.style.padding = "5px";
+            uviNumEl.style.borderRadius = "10px";
+        }else if (getUVIndex<5){
+            uviNumEl.style.backgroundColor = "yellow";
+            uviNumEl.style.display = "inline";
+            uviNumEl.style.padding = "5px";
+            uviNumEl.style.borderRadius = "10px";
+        } else {
+            uviNumEl.style.backgroundColor = "red";
+            uviNumEl.style.display = "inline";
+            uviNumEl.style.padding = "5px";
+            uviNumEl.style.borderRadius = "10px";
+        }
     
     var forecastEls = document.querySelectorAll(".forecast");
     for (i=0; i<forecastEls.length; i++) {
         forecastEls[i].innerHTML = "";
-        var forecastUnixTimestamp = data.daily[i].dt;
+        const forecastIndex = i + 1;
+        var forecastUnixTimestamp = data.daily[forecastIndex].dt;
         var forecastMilliseconds = forecastUnixTimestamp * 1000;
-        // options = {year: "numeric", month: "numeric", day: "numeric"};
         var futureDate = new Date(forecastMilliseconds)
         var forecastDate = futureDate.toLocaleDateString("en-US", options)
         var forecastDateEl = document.createElement("p");
@@ -117,21 +117,21 @@ var structureHTML = function (data, cityName) {
         forecastEls[i].append(forecastDateEl)
 
         var forecastWeatherEl = document.createElement("img")
-        forecastIconCode = data.daily[i].weather[0].icon;
+        forecastIconCode = data.daily[forecastIndex].weather[0].icon;
         forecastWeatherEl.setAttribute("src", "http://openweathermap.org/img/w/" + forecastIconCode + ".png")
         forecastEls[i].append(forecastWeatherEl)
 
         var forecastTempEl = document.createElement("p")
-        forecastTempEl.innerHTML = "Temp: " + data.daily[i].temp;
+        forecastTempEl.innerHTML = "Temp: " + data.daily[forecastIndex].temp.max + " &#176F";
         forecastEls[i].append(forecastTempEl);
 
         var forecastWindEl = document.createElement("p")
-        forecastWindEl.innerHTML = "Wind: " + data.daily[i].wind_speed;
+        forecastWindEl.innerHTML = "Wind: " + data.daily[forecastIndex].wind_speed + " MPH";
         forecastEls[i].append(forecastWindEl);
 
 
         var forecastHumidityEl = document.createElement("p")
-        forecastHumidityEl.innerHTML = "Humidity: " + data.daily[i].humidity;
+        forecastHumidityEl.innerHTML = "Humidity: " + data.daily[forecastIndex].humidity + " %";
         forecastEls[i].append(forecastHumidityEl);
 
     }
