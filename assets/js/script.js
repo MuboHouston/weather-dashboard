@@ -3,6 +3,9 @@ var cityInputEl = document.querySelector("#city-search");
 var currentWeatherContainerEl = document.querySelector("#current-container")
 var citySearchTerm = document.querySelector("#city-search-term")
 var dateEl = document.querySelector("#date");
+var historySearchEl = document.querySelector(".history-search")
+
+// localStorage.clear();
 
 var formSubmitHandler = function(event) {
     event.preventDefault();
@@ -10,16 +13,20 @@ var formSubmitHandler = function(event) {
 
     //get value from input element
     var cityName = cityInputEl.value.trim();
+
+    var displayHistory = document.createElement("button");
+    displayHistory.setAttribute("class", "history-buttons")
+    displayHistory.textContent = cityName; 
     
     if(cityName) {
         getLatLon(cityName);
+        localStorage.setItem("citySearchList", cityName);
+        localStorage.getItem("citySearchList");
+        historySearchEl.append(displayHistory);
         cityInputEl.value = "";
     } else {
         alert("Please enter city name")
     }
-    
-    localStorage.setItem("city", cityName);
-    localStorage.getItem("city")
 }
 
 var getLatLon = function(cityName) {
@@ -54,7 +61,7 @@ var getWeather = function(lat, lon, cityName) {
 }
 
 var structureHTML = function (data, cityName) {
-    console.log(data)
+    // console.log(data)
 
     citySearchTerm.textContent = cityName;
 
@@ -68,7 +75,6 @@ var structureHTML = function (data, cityName) {
     var iconCode = data.current.weather[0].icon;
     var iconUrl = "http://openweathermap.org/img/w/" + iconCode + ".png";
     document.querySelector("#wicon").setAttribute("src", iconUrl);
-    document.querySelector("#wicon").style.textAlign = "center";
 
     var getTemp = data.current.temp;
     var TempEl = document.querySelector(".temp");
@@ -95,7 +101,7 @@ var structureHTML = function (data, cityName) {
             uviNumEl.style.borderRadius = "10px";
             uviNumEl.style.color = "white"
         }else if (getUVIndex<5){
-            uviNumEl.style.backgroundColor = "yellow";
+            uviNumEl.style.backgroundColor = "rgb(235, 235, 119";
             uviNumEl.style.display = "inline";
             uviNumEl.style.padding = "5px";
             uviNumEl.style.borderRadius = "10px";
@@ -117,7 +123,7 @@ var structureHTML = function (data, cityName) {
         var futureDate = new Date(forecastMilliseconds)
         var forecastDate = futureDate.toLocaleDateString("en-US", options)
         var forecastDateEl = document.createElement("p");
-        forecastDateEl.setAttribute("Class", "forecast-date")
+        forecastDateEl.setAttribute("class", "forecast-date")
         forecastDateEl.innerHTML = forecastDate;
         forecastEls[i].append(forecastDateEl)
 
@@ -141,15 +147,24 @@ var structureHTML = function (data, cityName) {
         forecastHumidityEl.innerHTML = "Humidity: " + data.daily[forecastIndex].humidity + " %";
         forecastHumidityEl.style.fontSize = "25px"
         forecastEls[i].append(forecastHumidityEl);
-
-    }
-    for (var i = 0; i < localStorage.length; i++) {
-        var city = localStorage.getItem(i);
-        var cityName = $(".list-group").addClass("list-group-item");
-    
-        cityName.append("<li>" + city + "</li");
     }
 }
 
 searchFormEl.addEventListener("submit", formSubmitHandler);
+
+// historySearchEl.addEventListener("click", function() {
+//     var city = $(this).text();
+//     formSubmitHandler(city)
+// })
+
+
+ // localStorage.setItem("city", cityInputEl.value);
+    // localStorage.getItem("city")
+
+    // for (var i = 0; i < localStorage.length; i++) {
+    //     localStorage.getItem("citySearchList");
+    //     var cityName = $(".list-group").addClass("list-group-item");
+    
+    //     cityName.append("<li>" + city + "</li");
+    // }
 
