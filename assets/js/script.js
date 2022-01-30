@@ -143,6 +143,12 @@ var structureHTML = function (data, cityName) {
         forecastEls[i].append(forecastHumidityEl);
 
     }
+    for (var i = 0; i < localStorage.length; i++) {
+        var city = localStorage.getItem(i);
+        var cityName = $(".list-group").addClass("list-group-item");
+    
+        cityName.append("<li>" + city + "</li");
+    }
 }
 
 searchFormEl.addEventListener("submit", formSubmitHandler);
