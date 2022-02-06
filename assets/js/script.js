@@ -17,19 +17,29 @@ var formSubmitHandler = function(event) {
     if(cityName) {
         getLatLon(cityName);
         pastSearch(cityName);
-        saveSearch();
-        cities.unshift(cityName)
+        // saveSearch();
+        // cities.unshift(cityName)
+        cities.push(cityName)
+        // console.log("added", cities);
         cityInputEl.value = "";
     } else {
         alert("Please enter city name")
     }
+
+    localStorage.setItem("cities", JSON.stringify(cities))
+    JSON.parse(localStorage.getItem("cities"))
 }
 
 var pastSearch = function(pastSearch) {
     // console.log(pastSearch);
 
     var pastSearchEl = document.createElement("button");
-    pastSearchEl.textContent =pastSearch;
+
+    pastSearch = pastSearch.toLowerCase().split(" ");
+    for (let i = 0; i < pastSearch.length; i++) {
+        pastSearch[i] = pastSearch[i][0].toUpperCase() + pastSearch[i].substring(1);
+    }
+    pastSearchEl.textContent = pastSearch.join(" ");
     pastSearchEl.classList = "d-flex w-100 btn-light border p-2 mt-2";
     pastSearchEl.setAttribute("data-city", pastSearch);
     pastSearchEl.setAttribute("type", "submit");
@@ -43,9 +53,9 @@ var pastSearchHandler = function (event) {
     }
 }
 
-var saveSearch = function() {
-    localStorage.setItem("cities", JSON.stringify(cities))    
-};
+// var saveSearch = function() {
+//     localStorage.setItem("cities", JSON.stringify(cities))    
+// };
 
 var getLatLon = function(cityName) {
     //format the weather api url
@@ -81,7 +91,12 @@ var getWeather = function(lat, lon, cityName) {
 var structureHTML = function (data, cityName) {
     // console.log(data)
 
-    citySearchTerm.textContent = cityName;
+    var displayName = cityName.toLowerCase();
+    displayName = displayName.split(" ");
+    for (let i = 0; i < displayName.length; i++) {
+        displayName[i] = displayName[i][0].toUpperCase() + displayName[i].substring(1);
+    }
+    citySearchTerm.textContent = displayName.join(" ")
 
     var unixTimestamp = data.current.dt;
     var milliseconds = unixTimestamp * 1000;
